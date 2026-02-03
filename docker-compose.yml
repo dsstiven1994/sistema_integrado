@@ -1,0 +1,26 @@
+services:
+
+  postgres:
+    image: postgres:15
+    container_name: erp-db
+    restart: always
+    environment:
+      POSTGRES_DB: erp
+      POSTGRES_USER: erpuser
+      POSTGRES_PASSWORD: erppass
+    ports:
+      - "5432:5432"
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+
+  requerimientos-service:
+    build: ./services   # 👈 ESTA es la ruta real
+    container_name: requerimientos-service
+    ports:
+      - "8001:8001"
+    env_file: .env
+    depends_on:
+      - postgres
+
+volumes:
+  dbdata:
